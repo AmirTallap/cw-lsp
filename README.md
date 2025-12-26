@@ -38,6 +38,6 @@ docker run -p 3000:3000 cw-lsp-app
 
 **NOTE:** Currently, changing trained language inside of kata trainer does not switch the language  the backing language server process, and LSP results returned by it do not match currently open language. Language server session needs to be reinitialized with `Ctrl+F5` after changing currently trained language.
 
-**NOTE:** Currently, LSP process shuts down after 3 minutes of inactivity. It can be restarted by hard reload of the kata trainer.
+**NOTE:** Currently, backend LSP process shuts down after 3 minutes of inactivity. It can be restarted by hard reload of the kata trainer.
 
 **NOTE:** Startup of language servers for some languages can take some time. For Rust, it is ~10-20 seconds until it starts returning completion suggestions. Until the language server fully initializes, it may return no responses, or incomplete responses.

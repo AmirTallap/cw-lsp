@@ -1,14 +1,16 @@
 // ==UserScript==
 // @name         LSP Integration for Codewars
-// @namespace    hob.cw
-// @version      2025-12-21
-// @description  try to take over the world!
-// @author       Hobovsky (hobson@wp.pl)
+// @namespace    lsp.cw.hobovsky
+// @version      2025-12-21-001
+// @author       hobovsky
+// @updateURL    https://github.com/hobovsky/cw-lsp/raw/refs/heads/main/client/cw-lsp.user.js
+// @downloadURL  https://github.com/hobovsky/cw-lsp/raw/refs/heads/main/client/cw-lsp.user.js
 // @match        https://www.codewars.com/kata/*
 // @icon         data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==
 // @grant GM.xmlHttpRequest
 // @connect localhost
 // @connect self
+// @connect cw-lsp-hub.fly.dev
 // @require http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js
 // @require https://greasyfork.org/scripts/21927-arrive-js/code/arrivejs.js?version=198809
 // @require https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js
@@ -17,7 +19,8 @@
 (async function() {
     'use strict';
 
-    const lspServiceUrl = "http://localhost:3000";
+    const lspServiceUrl_ = "http://localhost:3000";
+    const lspServiceUrl  = "https://cw-lsp-hub.fly.dev";
 
     var $ = window.jQuery;
     $.noConflict();
