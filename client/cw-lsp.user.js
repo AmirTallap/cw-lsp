@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         LSP Integration for Codewars
 // @namespace    lsp.cw.hobovsky
-// @version      2025-12-21-001
+// @version      2025-12-21-002
 // @author       hobovsky
 // @updateURL    https://github.com/hobovsky/cw-lsp/raw/refs/heads/main/client/cw-lsp.user.js
 // @downloadURL  https://github.com/hobovsky/cw-lsp/raw/refs/heads/main/client/cw-lsp.user.js
@@ -103,8 +103,7 @@
                 displayText: getDisplayText(c),
                 lspItem: c,
                 hint: function(cm, data, completion) {
-                    console.info("Committed completion: ", completion);
-
+                    
                     let lspItem = completion.lspItem;
                     if(lspItem.textEdit) {
                         let from = lspItem.textEdit.range.start.character;
@@ -129,7 +128,7 @@
         };
     }
 
-    const supportedLangs = ["rust", "python"];
+    const supportedLangs = ["php", "python", "rust"];
 
     async function initLsp(kataId, language, editorId, userId) {
         let response = await GM.xmlHttpRequest({
@@ -172,7 +171,6 @@
 
         editor.addKeyMap({
             "Shift-Space": function (cm) {
-                console.info(`Shift+Space hit on token [${JSON.stringify(cm.getTokenAt(cm.getCursor()), null, 2)}]`);
                 cm.showHint({ hint: myHint,
                             completeSingle: false });
             }

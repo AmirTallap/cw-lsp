@@ -29,18 +29,24 @@ RUN mkdir rust \
 RUN mkdir python \
  && touch python/solution.py
 
+## PHP template
+
+RUN mkdir -p /opt/lsp-templates/php \
+ && printf "<?php\nfunction hello(){ }" > /opt/lsp-templates/php/solution.php \
+ && printf '{ "name": "scratch/project", "require": {} }\n' \
+    > /opt/lsp-templates/php/composer.json
 
 # Runtime stage
 FROM node:20-bookworm-slim
 WORKDIR /app
 
-## System deps (no Python)
+## System deps
 RUN apt-get update && apt-get install -y --no-install-recommends \
     curl \
     ca-certificates \
  && rm -rf /var/lib/apt/lists/*
 
-## Rust toolchain (runtime)
+## Rust: toolchain (runtime)
 RUN curl https://sh.rustup.rs -sSf | sh -s -- -y --profile minimal
 ENV PATH="/root/.cargo/bin:${PATH}"
 
@@ -54,11 +60,15 @@ RUN rm -rf \
     /root/.rustup/tmp \
     /root/.rustup/toolchains/*/share/doc
 
-## pyright
+## Python: pyright
 RUN npm install -g pyright \
  && npm cache clean --force
 
-## App deps
+## PHP: intelephense
+
+RUN npm i intelephense -g
+
+ ## App deps
 COPY package*.json ./
 RUN npm ci --omit=dev
 

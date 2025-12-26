@@ -40,4 +40,6 @@ docker run -p 3000:3000 cw-lsp-app
 
 **NOTE:** Currently, backend LSP process shuts down after 3 minutes of inactivity. It can be restarted by hard reload of the kata trainer.
 
-**NOTE:** Startup of language servers for some languages can take some time. For Rust, it is ~10-20 seconds until it starts returning completion suggestions. Until the language server fully initializes, it may return no responses, or incomplete responses.
+**NOTE (PHP):** Snippets must start with `<?php` directive. Old kata may be missing the directive in the solution setup, and it has to be added manually for LSP to work correctly.
+
+**NOTE (Rust):** Startup of language servers for Rust can take some time. Usually, it is ~10-20 seconds until it starts returning completion suggestions. Until the language server fully initializes, it may return no responses, or incomplete responses. It can also feel sluggish and responses can be returned with a noticeable delay.
