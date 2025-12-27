@@ -4,7 +4,10 @@ import { getCompletions } from "./completions/index.js";
 import { ensureLspSession } from './sessions/index.js';
 import { getCallParamHints } from './callParamHints/index.js';
 
-const app = express();
+import expressWs from 'express-ws';
+
+const { app } = expressWs(express());
+
 app.use(express.json());
 const port = 3000;
 
@@ -71,6 +74,19 @@ app.post('/get_call_params', async (req, res) => {
         callParamHints
     }
     res.send(response);
+});
+
+app.ws('/lsp-ws', (ws, req) => {
+
+  const url = new URL(req.url!, 'http://localhost');
+  const params = url.searchParams;
+  
+  let userId = params.get("userId");
+  let kataId = params.get("kataId");
+  let editorId = params.get("editorId");
+  let language = params.get("language");
+  console.info(`WebSocket connection requested for userId=${userId} kataId=${kataId}`);
+
 });
 
 app.listen(port, () => {

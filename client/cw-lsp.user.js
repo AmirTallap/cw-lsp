@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         LSP Integration for Codewars
 // @namespace    lsp.cw.hobovsky
-// @version      2025-12-21-004
+// @version      2025-12-21-005
 // @author       hobovsky
 // @updateURL    https://github.com/hobovsky/cw-lsp/raw/refs/heads/main/client/cw-lsp.user.js
 // @downloadURL  https://github.com/hobovsky/cw-lsp/raw/refs/heads/main/client/cw-lsp.user.js
@@ -19,8 +19,8 @@
 (async function() {
     'use strict';
 
-    const lspServiceUrl_ = "http://localhost:3000";
-    const lspServiceUrl  = "https://cw-lsp-hub.fly.dev";
+    const lspServiceUrl = "http://localhost:3000";
+    const lspServiceUrl_  = "https://cw-lsp-hub.fly.dev";
 
     var $ = window.jQuery;
     $.noConflict();
@@ -108,7 +108,7 @@
                 displayText: getDisplayText(c),
                 lspItem: c,
                 hint: function(cm, data, completion) {
-                    
+
                     let lspItem = completion.lspItem;
                     if(lspItem.textEdit) {
                         let from = lspItem.textEdit.range.start.character;
@@ -188,15 +188,11 @@
                 text: getText(c),
                 displayText: getDisplayText(c),
                 lspItem: c,
-                hint: function(cm, data, completion) {
-                    // let lspItem = completion.lspItem;
-                    //cm.replaceRange(lspItem.label, cursor);
-                }
+                hint: function(cm, data, completion) { /* do nothing */ }
             }));
         }
 
         let lspResponse = response.response;
-        console.info(JSON.stringify(lspResponse, null, 2));
         return {
             list: makeCompletions(lspResponse.callParamHints),
             from: cursor,
@@ -243,8 +239,13 @@
         editorElem.dataset.lspEditorId = editorId;
         let editor = editorElem.CodeMirror;
 
-        let initLspResponse = initLsp(url[2], url[4], editorId, App.instance.currentUser.id);
-
+        let userId = App.instance.currentUser.id;
+        let kataId = url[2];
+        let initLspResponse = initLsp(kataId, language, editorId, userId);
+        let webSocket = new WebSocket(lspServiceUrl.replace('http', 'ws') + `/lsp-ws?userId=${userId}&editorId=${editorId}&kataId=${kataId}&language=${language}`);
+        webSocket.onopen = () => {
+            console.info("Web socket connection established");
+        };
         editor.addKeyMap({
             "Shift-Space": function (cm) {
                 cm.showHint({ hint: hintCodeCompletion, completeSingle: false });
@@ -253,5 +254,7 @@
                 cm.showHint({ hint: hintCallParams, completeSingle: false, closeCharacters: /[)\]]/ });
             }
         });
+
+
     });
 })();
